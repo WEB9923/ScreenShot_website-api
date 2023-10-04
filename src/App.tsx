@@ -34,7 +34,7 @@ export default function App(): JSX.Element {
   const downloadImage = async (): Promise<void> => {
     await axios.get(state?.data?.screenshot_url, {
       responseType: 'blob',
-    }).then((response): void => {
+    }).then((response: AxiosResponse): void => {
       const blob = new Blob([response.data]);
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');

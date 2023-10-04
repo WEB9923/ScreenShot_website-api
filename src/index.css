@@ -6,7 +6,7 @@
    -webkit-tap-highlight-color: transparent;
 }
 ::-webkit-scrollbar {
-   @apply w-2 bg-gray-800;
+   @apply w-2 bg-gray-700;
 }
 ::-webkit-scrollbar-thumb {
    @apply rounded-md bg-gray-900 min-h-[6rem];
