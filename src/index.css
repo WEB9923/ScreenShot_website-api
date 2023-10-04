@@ -11,3 +11,6 @@
 ::-webkit-scrollbar-thumb {
    @apply rounded-md bg-gray-900 min-h-[6rem];
 }
+body {
+   @apply bg-gray-700 relative min-h-screen;
+}

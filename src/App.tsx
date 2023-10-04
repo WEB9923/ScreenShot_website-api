@@ -3,6 +3,7 @@ import Form from "./components/Form.tsx";
 import Result from "./components/Result.tsx";
 import axios, {AxiosResponse} from "axios";
 import {PuffLoader} from "react-spinners";
+import Loader from "./components/Loader.tsx";
 const URL: string = import.meta.env.VITE__URL;
 const KEY: string = import.meta.env.VITE__KEY;
 export interface IState {
@@ -177,16 +178,7 @@ export default function App(): JSX.Element {
             handleChangeToggleFulWebsiteHeight={handleChangeToggleFulWebsiteHeight}
           />
           <div className="relative min-h-[150px] mt-3">
-            {state.isLoading && !state.error ?
-              <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                <PuffLoader
-                  color="rgb(17,24,39,1)"
-                  loading
-                  size={65}
-                  speedMultiplier={1.5}
-                />
-              </div> : null
-            }
+            {state.isLoading && !state.error ? <Loader/> : null}
             {Object.keys(state.data).length > 1 ?
               <Result
                 state={state}
