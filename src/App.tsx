@@ -26,6 +26,30 @@ export default function App(): JSX.Element {
     isMobile: false,
     isFullHeight: false
   });
+  const [showFileNameInput, setShowFileNameInput] = useState<boolean>(false);
+  const [fileNameValue, setFileNameValue] = useState<string>("");
+  const handleChangeFileNameInput = ({ target }: ChangeEvent<HTMLInputElement>) => {
+    setFileNameValue(target.value);
+  }
+  const downloadIMG = async (): Promise<boolean | void> => {
+    try {
+      if(!fileNameValue) {
+        return false;
+      } else {
+        const response = await axios.get(state?.data?.screenshot_url, {
+          responseType: "blob"
+        });
+        const blob = new Blob([response.data], { type: response.headers['content-type']});
+        const link: HTMLAnchorElement = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = fileNameValue;
+        link.click();
+        setShowFileNameInput(false);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
   const handleChangeInput = ({ target }: ChangeEvent<HTMLInputElement>): void => {
     setState((prevState) => {
       return {
@@ -38,7 +62,6 @@ export default function App(): JSX.Element {
     setState((prevState) => {
       return {
         ...prevState,
-        data: { },
         isMobile: !prevState.isMobile
       }
     });
@@ -56,6 +79,7 @@ export default function App(): JSX.Element {
     setState((prevState) => {
       return {
         ...prevState,
+        data: { },
         isLoading: true
       }
     });
@@ -126,7 +150,7 @@ export default function App(): JSX.Element {
       }
     });
   }
-  const reset = () => {
+  const reset = (): void => {
     setState((prevState) => {
       return {
         ...prevState,
@@ -142,7 +166,6 @@ export default function App(): JSX.Element {
       reset();
     }
   }, [state.inputValue])
-  console.log(state)
   return (
     <Fragment>
       <div className="w-full min-h-screen p-2 font-Pixelify bg-gray-700">
@@ -165,7 +188,17 @@ export default function App(): JSX.Element {
                 />
               </div> : null
             }
-            {Object.keys(state.data).length > 1 ? <Result state={state}/> : null}
+            {Object.keys(state.data).length > 1 ?
+              <Result
+                state={state}
+                reset={reset}
+                fileNameValue={fileNameValue}
+                handleChangeFileNameInput={handleChangeFileNameInput}
+                setShowFileNameInput={setShowFileNameInput}
+                showFileNameInput={showFileNameInput}
+                downloadIMG={downloadIMG}
+              /> : null
+            }
             {state.error &&
               <h1 className={"absolute w-full text-center left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-2xl text-red-500 font-bold"}>
                 {state.error}
