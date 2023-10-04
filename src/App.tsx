@@ -3,8 +3,14 @@ import Form from "./components/Form.tsx";
 import Result from "./components/Result.tsx";
 import axios, {AxiosResponse} from "axios";
 import {PuffLoader} from "react-spinners";
+import Languages from "./components/Languages.tsx";
+import Button from "./components/Button.tsx";
+import {FiSettings} from "react-icons/fi";
+import {AnimatePresence} from "framer-motion";
+
 const URL: string = import.meta.env.VITE__URL;
 const KEY: string = import.meta.env.VITE__KEY;
+
 export interface IState {
   isLoading: boolean;
   data: IData | object;
@@ -13,6 +19,7 @@ export interface IState {
   isMobile: boolean;
   isFullHeight: boolean;
 }
+
 export type IData = {
   requested_url: string;
   screenshot_url: string;
@@ -20,7 +27,7 @@ export type IData = {
 export default function App(): JSX.Element {
   const [state, setState] = useState<IState>({
     isLoading: false,
-    data: { },
+    data: {},
     error: "",
     inputValue: "",
     isMobile: false,
@@ -28,29 +35,31 @@ export default function App(): JSX.Element {
   });
   const [showFileNameInput, setShowFileNameInput] = useState<boolean>(false);
   const [fileNameValue, setFileNameValue] = useState<string>("");
-  const handleChangeFileNameInput = ({ target }: ChangeEvent<HTMLInputElement>) => {
+  const handleChangeFileNameInput = ({target}: ChangeEvent<HTMLInputElement>) => {
     setFileNameValue(target.value);
   }
-  const downloadIMG = async (): Promise<boolean | void> => {
-    try {
-      if(!fileNameValue) {
-        return false;
-      } else {
-        const response = await axios.get(state?.data?.screenshot_url, {
-          responseType: "blob"
-        });
-        const blob = new Blob([response.data], { type: response.headers['content-type']});
-        const link: HTMLAnchorElement = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
-        link.download = fileNameValue;
-        link.click();
-        setShowFileNameInput(false);
-      }
-    } catch (err) {
-      console.error(err);
-    }
+  const downloadImage = async (): Promise<void> => {
+    await axios.get(state.data?.screenshot_url, {
+        responseType: 'blob',
+      }).then((response) => {
+        const blob = new Blob([response.data]);
+        const url = window.URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileNameValue + ".png";
+        a.style.display = 'none';
+
+        document.body.appendChild(a);
+        a.click();
+
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      }).catch((error) => {
+        console.error('Error downloading image:', error);
+      });
   }
-  const handleChangeInput = ({ target }: ChangeEvent<HTMLInputElement>): void => {
+  const handleChangeInput = ({target}: ChangeEvent<HTMLInputElement>): void => {
     setState((prevState) => {
       return {
         ...prevState,
@@ -66,7 +75,7 @@ export default function App(): JSX.Element {
       }
     });
   }
-  const handleChangeToggleFulWebsiteHeight = ():  void => {
+  const handleChangeToggleFulWebsiteHeight = (): void => {
     setState((prevState) => {
       return {
         ...prevState,
@@ -79,12 +88,12 @@ export default function App(): JSX.Element {
     setState((prevState) => {
       return {
         ...prevState,
-        data: { },
+        data: {},
         isLoading: true
       }
     });
     try {
-      if(!state.inputValue || !state.inputValue.startsWith("https://")) {
+      if (!state.inputValue || !state.inputValue.startsWith("https://")) {
         setState((prevState) => {
           return {
             ...prevState,
@@ -95,11 +104,11 @@ export default function App(): JSX.Element {
       } else {
         const response: AxiosResponse = await axios
           .get(`${URL}?url=${state.inputValue}${!state.isMobile ? "" : "&width=410"}&full=${state.isFullHeight.toString()}`, {
-          headers: {
-            apikey: KEY
-          }
-        });
-        if(response) {
+            headers: {
+              apikey: KEY
+            }
+          });
+        if (response) {
           setState((prevState) => {
             return {
               ...prevState,
@@ -108,7 +117,7 @@ export default function App(): JSX.Element {
               }
             }
           });
-          console.log("response->  ",response)
+          console.log("response->  ", response)
         }
       }
     } catch (err: unknown) {
@@ -121,21 +130,21 @@ export default function App(): JSX.Element {
               ...prevState,
               error: "The requested resource doesn't exist."
             }
-        });
+          });
         case 400:
           return setState((prevState) => {
             return {
               ...prevState,
               error: "The request was unacceptable, often due to missing a required parameter."
             }
-        });
+          });
         case 500 || 502 || 504:
           return setState((prevState) => {
             return {
               ...prevState,
               error: "Failed to process your request. Please try again after a few minutes."
             }
-        });
+          });
         default: {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
@@ -155,14 +164,14 @@ export default function App(): JSX.Element {
       return {
         ...prevState,
         isLoading: false,
-        data: { },
+        data: {},
         error: "",
         inputValue: "",
       }
     })
   }
   useEffect(() => {
-    if(!state.inputValue) {
+    if (!state.inputValue) {
       reset();
     }
   }, [state.inputValue])
@@ -193,14 +202,15 @@ export default function App(): JSX.Element {
                 state={state}
                 reset={reset}
                 fileNameValue={fileNameValue}
+                downloadImage={downloadImage}
                 handleChangeFileNameInput={handleChangeFileNameInput}
                 setShowFileNameInput={setShowFileNameInput}
                 showFileNameInput={showFileNameInput}
-                downloadIMG={downloadIMG}
               /> : null
             }
             {state.error &&
-              <h1 className={"absolute w-full text-center left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-2xl text-red-500 font-bold"}>
+              <h1
+                className={"absolute w-full text-center left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-2xl text-red-500 font-bold"}>
                 {state.error}
               </h1>
             }

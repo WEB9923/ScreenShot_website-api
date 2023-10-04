@@ -17,7 +17,7 @@ export default function Form({handleChangeInput, handleChangeToggleMobile, handl
     <Fragment>
       <form
         onSubmit={fetchData}
-        className={"w-full bg-gray-800 py-5 rounded-md flex flex-col justify-center px-4 border-2 border-gray-900 border-l-4 border-b-4"}
+        className={"w-full bg-gray-800 py-5 rounded-md flex flex-col justify-center px-4 border-2 transition-all duration-500 border-gray-900 border-l-4 border-b-4"}
       >
         <div className="w-full relative h-14">
           <FiLink2

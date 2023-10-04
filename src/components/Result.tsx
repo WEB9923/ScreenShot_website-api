@@ -6,15 +6,15 @@ import {AiOutlineCloudDownload} from "react-icons/ai";
 import {RiScreenshot2Line} from "react-icons/ri";
 import * as React from "react";
 
-export default function Result({state, reset, fileNameValue, handleChangeFileNameInput, showFileNameInput, setShowFileNameInput, downloadIMG}:
+export default function Result({state, reset, fileNameValue, handleChangeFileNameInput, downloadImage, showFileNameInput, setShowFileNameInput, downloadIMG}:
 {
   state: IState | object;
   reset: () => void;
   fileNameValue: string;
+  downloadImage: () => Promise<void>;
   handleChangeFileNameInput: ({target}: ChangeEvent<HTMLInputElement>) => void;
   showFileNameInput: boolean;
   setShowFileNameInput: React.Dispatch<React.SetStateAction<boolean>>;
-  downloadIMG: () => boolean | void
 }): JSX.Element {
   return (
     <Fragment>
@@ -31,7 +31,7 @@ export default function Result({state, reset, fileNameValue, handleChangeFileNam
           <img
             src={state?.data?.screenshot_url}
             alt="screenshoted url ERROR!"
-            loading={"lazy"}
+            loading={"eager"}
             className={"rounded-md pointer-events-none mx-auto"}
           />
           <div className="pt-6 flex flex-col gap-3">
@@ -62,7 +62,7 @@ export default function Result({state, reset, fileNameValue, handleChangeFileNam
                   />
                   <Button
                     content={"save"}
-                    clickEvent={downloadIMG}
+                    clickEvent={downloadImage}
                     classname={"w-full h-10 mt-2 rounded-md bg-green-800 text-gray-400 font-bold flex items-center justify-center"}
                   />
                 </motion.div> : null
