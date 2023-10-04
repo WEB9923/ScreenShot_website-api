@@ -5,6 +5,7 @@ import Button from "./Button.tsx";
 import {AiOutlineCloudDownload} from "react-icons/ai";
 import {RiScreenshot2Line} from "react-icons/ri";
 import * as React from "react";
+import ImageWithLoader from "./ImageWithLoader.tsx";
 export default function Result(
   {
     state,
@@ -26,7 +27,11 @@ export default function Result(
   return (
     <Fragment>
       <AnimatePresence>
-        <div
+        <motion.div
+          initial={{scale: 2}}
+          animate={{scale: 1}}
+          exit={{scale: 0}}
+          transition={{duration: 0.3, type: "spring", stiffness: 150}}
           className="w-fit min-h-[350px] mx-auto bg-gray-800 rounded-md py-5 px-4 mb-5 select-none border-2 border-gray-900 border-b-4 border-l-4"
         >
           <motion.div
@@ -35,11 +40,8 @@ export default function Result(
             transition={{duration: 0.3, type: "spring", stiffness: 130}}
             className="rounded-md h-auto w-full"
           >
-            <img
-              src={state?.data?.screenshot_url}
-              alt="screenshoted url ERROR!"
-              loading={"eager"}
-              className={"rounded-md pointer-events-none mx-auto"}
+            <ImageWithLoader
+              source={state?.data?.screenshot_url}
             />
             <div className="pt-6 flex flex-col gap-3">
               <Button
@@ -87,7 +89,7 @@ export default function Result(
               />
             </div>
           </motion.div>
-        </div>
+        </motion.div>
       </AnimatePresence>
     </Fragment>
   );

@@ -12,5 +12,5 @@
    @apply rounded-md bg-gray-900 min-h-[6rem];
 }
 body {
-   @apply bg-gray-700 relative min-h-screen;
+   @apply bg-gray-700 relative min-h-screen font-Pixelify overflow-x-hidden;
 }

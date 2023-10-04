@@ -7,10 +7,10 @@ export default function Loader({loadingText}: {loadingText?: string}): JSX.Eleme
       <PuffLoader
         color="rgb(17,24,39,1)"
         loading
-        size={65}
-        speedMultiplier={1.5}
+        size={70}
+        speedMultiplier={1.7}
       />
-      {loadingText ? <h2 className={"text-gray-500 font-bold text-center text-2xl"}>{loadingText}</h2> : null}
+      {loadingText ? <h2 className={"text-gray-500 font-bold text-center text-3xl tracking-wider"}>{loadingText}</h2> : null}
     </div>
   );
 }
