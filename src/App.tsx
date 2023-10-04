@@ -2,7 +2,6 @@ import {ChangeEvent, Fragment, JSX, SyntheticEvent, useEffect, useState} from "r
 import Form from "./components/Form.tsx";
 import Result from "./components/Result.tsx";
 import axios, {AxiosResponse} from "axios";
-import {PuffLoader} from "react-spinners";
 import Loader from "./components/Loader.tsx";
 const URL: string = import.meta.env.VITE__URL;
 const KEY: string = import.meta.env.VITE__KEY;
