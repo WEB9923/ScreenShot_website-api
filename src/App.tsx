@@ -3,14 +3,8 @@ import Form from "./components/Form.tsx";
 import Result from "./components/Result.tsx";
 import axios, {AxiosResponse} from "axios";
 import {PuffLoader} from "react-spinners";
-import Languages from "./components/Languages.tsx";
-import Button from "./components/Button.tsx";
-import {FiSettings} from "react-icons/fi";
-import {AnimatePresence} from "framer-motion";
-
 const URL: string = import.meta.env.VITE__URL;
 const KEY: string = import.meta.env.VITE__KEY;
-
 export interface IState {
   isLoading: boolean;
   data: IData | object;
@@ -19,7 +13,6 @@ export interface IState {
   isMobile: boolean;
   isFullHeight: boolean;
 }
-
 export type IData = {
   requested_url: string;
   screenshot_url: string;
@@ -35,29 +28,26 @@ export default function App(): JSX.Element {
   });
   const [showFileNameInput, setShowFileNameInput] = useState<boolean>(false);
   const [fileNameValue, setFileNameValue] = useState<string>("");
-  const handleChangeFileNameInput = ({target}: ChangeEvent<HTMLInputElement>) => {
+  const handleChangeFileNameInput = ({target}: ChangeEvent<HTMLInputElement>): void => {
     setFileNameValue(target.value);
   }
   const downloadImage = async (): Promise<void> => {
-    await axios.get(state.data?.screenshot_url, {
-        responseType: 'blob',
-      }).then((response) => {
-        const blob = new Blob([response.data]);
-        const url = window.URL.createObjectURL(blob);
-
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = fileNameValue + ".png";
-        a.style.display = 'none';
-
-        document.body.appendChild(a);
-        a.click();
-
-        window.URL.revokeObjectURL(url);
-        document.body.removeChild(a);
-      }).catch((error) => {
-        console.error('Error downloading image:', error);
-      });
+    await axios.get(state?.data?.screenshot_url, {
+      responseType: 'blob',
+    }).then((response): void => {
+      const blob = new Blob([response.data]);
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileNameValue + ".png";
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    }).catch((error) => {
+      console.error('Error downloading image:', error);
+    });
   }
   const handleChangeInput = ({target}: ChangeEvent<HTMLInputElement>): void => {
     setState((prevState) => {

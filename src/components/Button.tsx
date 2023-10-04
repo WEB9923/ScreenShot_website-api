@@ -1,6 +1,5 @@
 import {motion} from "framer-motion";
 import {JSX, ReactNode} from "react";
-
 export default function Button({content, clickEvent, classname, y}:
 {
   content: ReactNode;

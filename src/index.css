@@ -1,14 +1,13 @@
 @tailwind base;
 @tailwind utilities;
 @tailwind components;
-
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    list-style-type:none;
-    text-decoration:none;
-    -webkit-tap-highlight-color: transparent;
+* {
+   @apply m-0 p-0 box-border list-none decoration-0;
+   -webkit-tap-highlight-color: transparent;
 }
-
+::-webkit-scrollbar {
+   @apply w-2 bg-gray-800;
+}
+::-webkit-scrollbar-thumb {
+   @apply rounded-md bg-gray-900 min-h-[6rem];
+}

@@ -4,15 +4,20 @@ import {FiLink2} from "react-icons/fi";
 import Button from "./Button.tsx";
 import {IState} from "../App.tsx";
 import Toggler from "./Toggler.tsx";
-
-export default function Form({handleChangeInput, handleChangeToggleMobile, handleChangeToggleFulWebsiteHeight, state, fetchData}:
-{
-  handleChangeInput: ({target}: ChangeEvent<HTMLInputElement>) => void;
-  handleChangeToggleMobile: () => void;
-  handleChangeToggleFulWebsiteHeight: () => void;
-  state: IState;
-  fetchData: (e: SyntheticEvent<HTMLFormElement>) => Promise<void | boolean>;
-}): JSX.Element {
+export default function Form(
+  {
+    handleChangeInput,
+    handleChangeToggleMobile,
+    handleChangeToggleFulWebsiteHeight,
+    state,
+    fetchData
+  }: {
+    handleChangeInput: ({target}: ChangeEvent<HTMLInputElement>) => void;
+    handleChangeToggleMobile: () => void;
+    handleChangeToggleFulWebsiteHeight: () => void;
+    state: IState;
+    fetchData: (e: SyntheticEvent<HTMLFormElement>) => Promise<void | boolean>;
+  }): JSX.Element {
   return (
     <Fragment>
       <form
@@ -34,18 +39,19 @@ export default function Form({handleChangeInput, handleChangeToggleMobile, handl
           <Button
             content={<RiScreenshot2Line size={24}/>}
             y={"-50%"}
-            clickEvent={() => {}}
+            clickEvent={() => {
+            }}
             classname={"absolute right-2 top-1/2 transform-none -translate-y-1/2 flex items-center justify-center h-[calc(48px-8px)] w-14 bg-gray-800 rounded-md text-gray-500"}
           />
         </div>
         <div className="pt-3 w-full">
           <Toggler
-            isCheked={state.isMobile}
+            isChecked={state.isMobile}
             change={handleChangeToggleMobile}
             title={"screenshot mobile version (iPhone 12 Pro)"}
           />
           <Toggler
-            isCheked={state.isFullHeight}
+            isChecked={state.isFullHeight}
             change={handleChangeToggleFulWebsiteHeight}
             title={"take screenshot full website height. (This may take longer)"}
           />
