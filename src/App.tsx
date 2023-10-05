@@ -33,7 +33,10 @@ export default function App(): JSX.Element {
   }
   const downloadImage = async (): Promise<void> => {
     await axios.get(state?.data?.screenshot_url, {
-      responseType: 'blob',
+      responseType: "blob",
+      headers: {
+        changeOrigin: false,
+      }
     }).then((response: AxiosResponse): void => {
       const blob = new Blob([response.data]);
       const url = window.URL.createObjectURL(blob);
@@ -107,7 +110,6 @@ export default function App(): JSX.Element {
               }
             }
           });
-          console.log("response->  ", response)
         }
       }
     } catch (err: unknown) {

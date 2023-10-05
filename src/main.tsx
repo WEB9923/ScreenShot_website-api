@@ -7,7 +7,9 @@ import {
   LazyExoticComponent
 } from "react";
 import Loader from "./components/Loader.tsx";
-const App: LazyExoticComponent<() => JSX.Element> = lazy(() => import('./App.tsx'));
+const App: LazyExoticComponent<() => JSX.Element> = lazy(
+  () => import('./App.tsx')
+);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <Suspense fallback={<Loader loadingText={"loading..."}/>}>
