@@ -13,7 +13,7 @@ export default function Button({content, clickEvent, classname, y}:
       whileTap={{y: y, scale: 0.9}}
       transition={{duration: 0.08, type: "spring", stiffness: 350}}
       onClick={clickEvent}
-      className={classname}
+      className={`${classname} hover:opacity-80 transition-opacity duration-200`}
     >
       {content}
     </motion.button>
