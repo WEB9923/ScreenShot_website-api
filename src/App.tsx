@@ -7,15 +7,15 @@ const URL: string = import.meta.env.VITE__URL;
 const KEY: string = import.meta.env.VITE__KEY;
 export interface IState {
   isLoading: boolean;
-  data: IData | object;
+  data: IData;
   error: string;
   inputValue: string;
   isMobile: boolean;
   isFullHeight: boolean;
 }
-export type IData = {
-  requested_url: string;
-  screenshot_url: string;
+export interface IData {
+  requested_url?: string | undefined;
+  screenshot_url?: string | undefined;
 }
 export default function App(): JSX.Element {
   const [state, setState] = useState<IState>({
@@ -32,25 +32,27 @@ export default function App(): JSX.Element {
     setFileNameValue(target.value);
   }
   const downloadImage = async (): Promise<void> => {
-    await axios.get(state?.data?.screenshot_url, {
-      responseType: "blob",
-      headers: {
-        changeOrigin: false,
-      }
-    }).then((response: AxiosResponse): void => {
-      const blob = new Blob([response.data]);
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = fileNameValue + ".png";
-      a.style.display = 'none';
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-    }).catch((error) => {
-      console.error('Error downloading image:', error);
-    });
+    if (state.data?.screenshot_url != null || state.data?.screenshot_url != undefined) {
+      await axios.get(state.data?.screenshot_url, {
+        responseType: "blob",
+        headers: {
+          changeOrigin: false,
+        }
+      }).then((response: AxiosResponse): void => {
+        const blob = new Blob([response.data]);
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileNameValue + ".png";
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      }).catch((error) => {
+        console.error('Error downloading image:', error);
+      });
+    }
   }
   const handleChangeInput = ({target}: ChangeEvent<HTMLInputElement>): void => {
     setState((prevState) => {
@@ -162,7 +164,7 @@ export default function App(): JSX.Element {
       }
     })
   }
-  useEffect(() => {
+  useEffect((): void => {
     if (!state.inputValue) {
       reset();
     }
@@ -191,11 +193,11 @@ export default function App(): JSX.Element {
                 showFileNameInput={showFileNameInput}
               /> : null
             }
-            {state.error &&
+            {state.error ?
               <h1
                 className={"absolute w-full text-center left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-2xl text-red-500 font-bold"}>
                 {state.error}
-              </h1>
+              </h1> : null
             }
           </div>
         </div>
